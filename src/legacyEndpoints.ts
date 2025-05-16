@@ -12,6 +12,7 @@ export function setupLegacyEndpoints(
   // Legacy SSE endpoint for older clients
   app.get("/sse", async (req, res) => {
     // Create SSE transport for legacy clients
+    console.log("sse route");
     const transport = new SSEServerTransport("/messages", res);
     transports.sse[transport.sessionId] = transport;
 
@@ -19,11 +20,13 @@ export function setupLegacyEndpoints(
       delete transports.sse[transport.sessionId];
     });
 
+    res.setHeader("Access-Control-Expose-Headers", transport.sessionId);
     await server.connect(transport);
   });
 
   // Legacy message endpoint for older clients
   app.post("/messages", async (req, res) => {
+    console.log("messages route");
     const sessionId = req.query.sessionId as string;
     const transport = transports.sse[sessionId];
     if (transport) {
