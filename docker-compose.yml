@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT: ${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - PORT=${SERVER_PORT}
+      - SERVER_IP=${SERVER_IP}
+      - API_SERVER_TOOLS=${API_SERVER_TOOLS}
