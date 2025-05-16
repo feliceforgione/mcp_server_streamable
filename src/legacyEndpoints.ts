@@ -14,13 +14,13 @@ export function setupLegacyEndpoints(
     // Create SSE transport for legacy clients
     console.log("sse route");
     const transport = new SSEServerTransport("/messages", res);
+    res.setHeader("Access-Control-Expose-Headers", transport.sessionId);
     transports.sse[transport.sessionId] = transport;
 
     res.on("close", () => {
       delete transports.sse[transport.sessionId];
     });
 
-    res.setHeader("Access-Control-Expose-Headers", transport.sessionId);
     await server.connect(transport);
   });
 
